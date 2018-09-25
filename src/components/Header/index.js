@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col } from 'antd'
 import './index.scss'
 import Util from '../../utils/utils'
-import axios from '../../axios/index'
+// import axios from '../../axios/index'
 export default class Header extends React.Component{
     constructor(props) {
         super(props);
@@ -24,16 +24,16 @@ export default class Header extends React.Component{
         this.getWeatherAPIData();
     }
     getWeatherAPIData() {
-        let city = '北京';
-        let url1 = `https://www.sojson.com/open/api/weather/json.shtml?city=${encodeURIComponent(city)}`;
-        axios.jsonp({
-            url: url1
-        }).then((res) => {
-            console.log(res)
-            // if(res.status === 'success') {
-            //     // let data = res.results[0]
-            // }
-        })
+        // let city = '北京';
+        // let url1 = `https://www.sojson.com/open/api/weather/json.shtml?city=${encodeURIComponent(city)}`;
+        // axios.jsonp({
+        //     url: url1
+        // }).then((res) => {
+        //     console.log(res)
+        //     if(res.status === 'success') {
+        //         // let data = res.results[0]
+        //     }
+        // })
     }
     render() {
         return (

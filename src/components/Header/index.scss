@@ -1,4 +1,6 @@
+@import '../../styles/default.scss';
 .header{
+    background:$colorM;
     .header-top{
         height: 60px;
         line-height:60px;
@@ -15,6 +17,18 @@
         border-top:1px solid #f9c700;
         .breadcrumb-title{
             text-align:center;
+            position:relative;
+            font-size: $fontC;
+            &:after{
+                display:block;
+                content: '';
+                position:absolute;
+                bottom: -19px;
+                left:50%;
+                margin-left:-10px;
+                border:10px solid transparent;
+                border-top-color:$colorM;
+            }
         }
         .weather{
             text-align: right;

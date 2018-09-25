@@ -1,14 +1,20 @@
-
+@import './default.scss';
 .container{
     display: flex;
     .nav-left{
         min-width: 180px;
         height: calc(100vh);
         background-color:#001529;
+        .ant-menu{
+            overflow:auto;
+            height: calc(100vh - 91px);
+        }
     }
     .main{
         flex: 1;
         height: calc(100vh);
+        background: $colorL;
+        overflow:auto;
     }
     .content{
         position:relative;
