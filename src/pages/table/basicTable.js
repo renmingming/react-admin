@@ -1,6 +1,7 @@
 import React from 'react'
-import {Card, Table, Modal} from 'antd'
+import {Card, Table, Modal, message, Button} from 'antd'
 import axios from './../../axios/index.js'
+import Utils from './../../utils/utils.js'
 
 export default class BasicTable extends React.Component{
     componentWillMount() {
@@ -24,14 +25,18 @@ export default class BasicTable extends React.Component{
         })
         this.request();
     }
+    params = {
+        page: 1
+    }
     request = () => {
+        let _this = this;
         axios.ajax({
             url: '/table/list',
             data: {
                 params: {
-                    page: 1,
+                    page: this.params.page,
                 },
-                isShowLoading: false
+                // isShowLoading: false
             }
         }).then((res) => {
             if(res.code === 0){
@@ -39,7 +44,13 @@ export default class BasicTable extends React.Component{
                     return item.key = index
                 })
                 this.setState({
-                    dataSource2: res.result.list
+                    dataSource2: res.result.list,
+                    selectedRowKeys: [],
+                    selectedRows: null,
+                    pagination: Utils.pagination(res, (current) => {
+                        _this.params.page = current
+                        _this.request()
+                    })
                 })
             }
         })
@@ -52,14 +63,39 @@ export default class BasicTable extends React.Component{
             content: `用户名：${record.userName}`
         })
         this.setState({
-            selectEdRowKeys: selectKey, // 行索引
+            selectedRowKeys: selectKey, // 行索引
             selectedItem: record // 行信息
+        })
+    }
+    handleDelete = () => {
+        let rows = this.state.selectedRows;
+        let ids = [];
+        rows.map((item) => {
+            return ids.push(item.id)
+        })
+        Modal.confirm({
+            title: '删除提示',
+            content: `您确定要删除这些数据吗？id: ${ids.join(',')}`,
+            onOk: () => {
+                message.success('删除成功！')
+                this.request()
+            }
         })
     }
     render() {
         const rowSelection = {
             type: 'radio',
-            selectEdRowKeys: this.state.selectEdRowKeys
+            selectedRowKeys: this.state.selectedRowKeys
+        }
+        const rowCheckSelection = {
+            type: 'checkbox',
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.setState({
+                    selectedRowKeys,
+                    selectedRows
+                })
+            }
         }
         const columns = [
             {
@@ -162,6 +198,44 @@ export default class BasicTable extends React.Component{
                         columns={columns}
                         dataSource={this.state.dataSource2}
                         pagination={false}
+                    />
+                </Card>
+                <Card title="Mock-复选">
+                    <div style={{marginBottom:'15px'}}>
+                        <Button onClick={this.handleDelete}>删除</Button>
+                    </div>
+                    <Table 
+                        // 多选
+                        rowSelection={rowCheckSelection}
+                        onRow={(record, index) => {
+                            return {
+                                onClick: () => { // 点击行
+                                    this.onRowClick(record, index)
+                                }
+                            }
+                        }}
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={false}
+                    />
+                </Card>
+                <Card title="Mock-分页">
+                    <div style={{marginBottom:'15px'}}>
+                        <Button onClick={this.handleDelete}>删除</Button>
+                    </div>
+                    <Table 
+                        // 多选
+                        rowSelection={rowCheckSelection}
+                        onRow={(record, index) => {
+                            return {
+                                onClick: () => { // 点击行
+                                    this.onRowClick(record, index)
+                                }
+                            }
+                        }}
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={this.state.pagination}
                     />
                 </Card>
             </div>

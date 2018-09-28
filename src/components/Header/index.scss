@@ -6,6 +6,17 @@
         line-height:60px;
         padding: 0 20px;
         text-align: right;
+        .logo{
+            line-height:60px;
+            text-align:left;
+            img{
+                display:inline-block;
+                width:auto;
+                margin-right:15px;
+                height:45px;
+                vertical-align: middle;
+            }
+        }
         a{
             margin-left: 40px;
         }
@@ -38,3 +49,16 @@
         }
     }
 }
+
+// common 页面简单头
+.simple-page{
+    .header-top{
+      background:#1890ff;
+      color:$colorM;
+    }
+    .ant-form,
+    .ant-col-12,
+    .weather{
+      display:none;
+    }
+  }

@@ -1,8 +1,32 @@
 import JsonP from 'jsonp'
 import axios from 'axios'
 import {Modal} from 'antd'
+import Utils from '../utils/utils.js'
 
 export default class Axios{
+    static requestList(_this, url, params) {
+        let data = {
+            params
+        }
+        this.ajax({
+            url,
+            data
+        }).then((data) => {
+            if(data && data.result) {
+                let list = data.result.item_list.map((item, index) => {
+                    item.key = index;
+                    return item;
+                })
+                _this.setState({
+                    list,
+                    pagination: Utils.pagination(data, (current) => {
+                        _this.params.page = current;
+                        _this.requestList()
+                    })
+                })
+            }
+        })
+    }
     static jsonp(option) {
         return new Promise((resolve, reject) => {
             JsonP(option.url, {
@@ -17,12 +41,18 @@ export default class Axios{
         })
     }
     static ajax(options) {
-        let loading;
+        let loading,baseApi;
         if(options.data && options.data.isShowLoading !== false) {
             loading = document.getElementById('ajaxLoading');
             loading.style.display = 'block';
         }
-        let baseApi = 'https://www.easy-mock.com/mock/5bab71e33567340cc7d3dc66/rmmapi';
+        if(options.isMock) {
+            // mock数据地址
+            baseApi = 'https://www.easy-mock.com/mock/5bab71e33567340cc7d3dc66/rmmapi';
+        }else{
+            // 真实数据地址
+            baseApi = 'https://www.easy-mock.com/mock/5bab71e33567340cc7d3dc66/rmmapi';
+        }
         return new Promise((resovle, reject) => {
             axios({
                 url: options.url,
