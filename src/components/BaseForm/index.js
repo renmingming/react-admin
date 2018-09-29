@@ -1,9 +1,9 @@
 import React from 'react'
-import { Input, Select, Form, Button, Checkbox, Radio} from 'antd'
+import { Input, Select, Form, Button, Checkbox, DatePicker} from 'antd'
 import utils from '../../utils/utils';
 
 const FormItem = Form.Item;
-const Opiton = Select.Option;
+// const Opiton = Select.Option;
 
 class FilterForm extends React.Component{
 
@@ -36,7 +36,7 @@ class FilterForm extends React.Component{
                         }
                     </FormItem>
                     formItemList.push(begin_time)
-                     const end_time = <FormItem label="~" colon={false} key={field}>
+                    const end_time = <FormItem label="~" colon={false} key={field}>
                             {
                                 getFieldDecorator('end_time', {
                                     initialValue: initialValue
@@ -45,15 +45,25 @@ class FilterForm extends React.Component{
                                 )
                             }
                         </FormItem>
-                 formItemList.push(end_time)
-                }
-                if(item.type === 'INPUT') {
-                    const INPUT = <FormItem label={label} key={field}>
+                    formItemList.push(end_time)
+                }else if(item.type === 'DATE') {
+                    const date = <FormItem label={label} key={field}>
                         {
                             getFieldDecorator([field], {
                                 initialValue: initialValue
                             }) (
-                                <Input placeholder={placeholder} />
+                                <DatePicker placeholder={placeholder} />
+                            )
+                        }
+                    </FormItem>
+                    formItemList.push(date)
+                }else if(item.type === 'INPUT'){
+                    const INPUT = <FormItem label={label} key={field}>
+                        {
+                            getFieldDecorator([field],{
+                                initialValue: initialValue
+                            }) (
+                                <Input type="text" placeholder={placeholder} />
                             )
                         }
                     </FormItem>
@@ -97,7 +107,7 @@ class FilterForm extends React.Component{
     render() {
         return (
             <Form layout="inline">
-                {this.initFormList}
+                {this.initFormList()}
                 <FormItem>
                     <Button type="primary" style={{margin: '0 20px'}} onClick={this.handleFilterSubmit}>查询</Button>
                     <Button onClick={this.reset}>重置</Button>
@@ -107,4 +117,4 @@ class FilterForm extends React.Component{
     }
 }
 
-export default  Form.create({})(FilterForm)
+export default  Form.create()(FilterForm);

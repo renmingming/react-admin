@@ -66,7 +66,7 @@ export default class OrderDetail extends React.Component{
             // 起始icon和大小
             let startIcon = new window.BMap.Icon('/assets/start_point.png', new window.BMap.Size(36, 42), {
                 imageSize: new window.BMap.Size(36, 42),
-                anchor: new window.BMap.Size(36, 42)
+                anchor: new window.BMap.Size(18, 42)
             })
 
             let startMarker = new window.BMap.Marker(startPoint, {icon: startIcon});
@@ -77,7 +77,7 @@ export default class OrderDetail extends React.Component{
             // 终点icon和大小
             let endIcon = new window.BMap.Icon('/assets/end_point.png', new window.BMap.Size(36, 42), {
                 imageSize: new window.BMap.Size(36, 42),
-                anchor: new window.BMap.Size(36, 42)
+                anchor: new window.BMap.Size(18, 42)
             })
             let endMarker = new window.BMap.Marker(endPoint, {icon: endIcon});
             this.map.addOverlay(endMarker)
