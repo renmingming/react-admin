@@ -145,6 +145,7 @@ export default class User extends React.Component{
                 })
                 console.log(data)
                 message.success(`员工：${data.userName}，信息${type === "create" ? "创建" : "更新"}成功`)
+                this.userForm.props.form.resetFields();
                 this.requestList();
             }
         })

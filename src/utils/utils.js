@@ -32,5 +32,13 @@ export default {
             return options.push(<Option value={item.id} key={item.id}>{item.name}</Option>)
         })
         return options;
+    },
+    updateSelectedItem(selectedRows, selectedRowKeys, selectedIds) {
+        if(selectedIds) {}else{
+            this.setState({
+                selectedRowKeys,
+                selectedItem: selectedRows
+            })
+        }
     }
 }
