@@ -126,16 +126,39 @@ export default class permissionUser extends React.Component{
                     status: dataSource[i].status
                 }
                 if(data.status === 1) {
-                    targetKeys.push(data);
-                }else{
-                    mockData.push(data);
+                    // targetKeys为key 的集合
+                    targetKeys.push(data.key);
                 }
+                mockData.push(data); // 全数据，自动率选去掉右边的数据
             }
             this.setState({
                 mockData,
                 targetKeys
             })
         }
+    }
+    // 用户授权提交
+    handleUserSubmit = () => {
+        let data = {};
+        data.user_ids = this.state.targetKeys;
+        // 角色id
+        data.role_id = this.state.selectedItem.id;
+        axios.ajax({
+            url: '/role/user_role_edit',
+            data: {
+                params: {
+                    ...data
+                }
+            }
+        }).then(res => {
+            if(res.code === 0) {
+                this.setState({
+                    isUserVisible: false
+                })
+                message.success(`角色：${this.state.selectedItem.role_name}，用户授权成功`)
+                this.requestList()
+            }
+        }) 
     }
     render() {
         const columns = [
@@ -227,7 +250,11 @@ export default class permissionUser extends React.Component{
                         mockData={this.state.mockData}
                         targetKeys={this.state.targetKeys}
                         detailInfo={this.state.detailInfo}
-                        render={item => item.title}
+                        patchUserInfo={(targetKeys) => {
+                            this.setState({
+                                targetKeys
+                            })
+                        }}
                          />
                 </Modal>
             </div>
@@ -332,6 +359,9 @@ class RoleAuthForm extends React.Component{
     filterOption = (inputValue, option) => {
         return option.title.indexOf(inputValue) > -1;
     }
+    handleChange = (targetKeys) => {
+        this.props.patchUserInfo(targetKeys)
+    }
     render() {
         let detailInfo = this.props.detailInfo;
         const locale = {
@@ -340,19 +370,32 @@ class RoleAuthForm extends React.Component{
             notFoundContent: '列表为空',
             searchPlaceholder: '请输入搜索内容'
         }
+        const formItemLayout = {
+            labelCol:{
+                span:5
+            },
+            wrapperCol: {
+                span: 19
+            }
+        }
         return(
             <Form layout="horizontal">
-                <FormItem label="角色名称">
+                <FormItem label="角色名称" {...formItemLayout}>
                     <Input disabled placeholder={detailInfo.role_name}/>
                 </FormItem>
-                <Transfer
-                    dataSource={this.props.mockData}
-                    titles={['待选用户','已选用户']}
-                    showSearch
-                    locale={locale}
-                    filterOption={this.filterOption}
-                    targetKeys={this.props.targetKeys}
-                />
+                <FormItem label="选择用户" {...formItemLayout}>
+                    <Transfer
+                        listStyle={{width:200, height:400}}
+                        dataSource={this.props.mockData}
+                        titles={['待选用户','已选用户']}
+                        showSearch
+                        locale={locale}
+                        filterOption={this.filterOption}
+                        targetKeys={this.props.targetKeys}
+                        onChange={this.handleChange}
+                        render={item => item.title}
+                    />
+                </FormItem>
             </Form>
         )
     }

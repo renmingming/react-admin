@@ -58,7 +58,7 @@ export default class Axios{
                 url: options.url,
                 method: 'get',
                 baseURL: baseApi,
-                timeout: 5000, // 5s超时
+                timeout: 15000, // 15s超时
                 params: (options.data && options.data.params) || ''
             }).then((response) => {
                 if(options.data && options.data.isShowLoading !== false) {
