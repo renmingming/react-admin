@@ -1,16 +1,23 @@
 import React from 'react'
 import {NavLink} from 'react-router-dom'
 import MenuConfig from './../../config/menuConfig'
+import {connect} from 'react-redux' // 连接器redux和组件链接
+import {switchMenu} from './../../redux/action'
 import './index.scss'
 import { Menu } from 'antd'
 const SubMenu = Menu.SubMenu;
 
-export default class NavLeft extends React.Component{
+class NavLeft extends React.Component{
+    state = {
+        currentKey: ''
+    }
     componentWillMount() {
         const menuTreeNode = this.renderMenu(MenuConfig);
-
+        let url = window.location.hash;
+        let currentKey = url.replace(/#|\?.*$/g, '')
         this.setState({
-            menuTreeNode
+            menuTreeNode,
+            currentKey
         })
     }
     // 菜单渲染
@@ -30,6 +37,13 @@ export default class NavLeft extends React.Component{
             )
         })
     }
+    handleClick = ({item, key}) => {
+        const {dispatch} = this.props; // 通过connect链接才能取到
+        dispatch(switchMenu(item.props.children.props.children))
+        this.setState({
+            currentKey: key
+        })
+    }
     render() {
         return (
             <div>
@@ -37,10 +51,14 @@ export default class NavLeft extends React.Component{
                     <img src="/assets/logo.svg" alt="" />
                     <h1>RMM MS</h1>
                 </div>
-                <Menu mode="vertical" theme="dark">
+                <Menu 
+                    onClick={this.handleClick}
+                    selectedKeys={[this.state.currentKey]} mode="vertical" theme="dark">
                     {this.state.menuTreeNode}
                 </Menu>
             </div>
         )
     }
 }
+
+export default connect()(NavLeft);
