@@ -17,6 +17,7 @@ import FormLogin from './pages/form/login.js'
 import FormRegister from './pages/form/register.js'
 import BasicTable from './pages/table/basicTable.js'
 import HighTable from './pages/table/highTable.js'
+import RichText from './pages/rich/index.js'
 import City from './pages/city/index.js'
 import Order from './pages/order/index.js'
 import Common from './common.js'
@@ -55,6 +56,7 @@ export default class IRouter extends React.Component{
                                     <Route path="/form/reg" component={FormRegister} />
                                     <Route path="/table/basic" component={BasicTable} />
                                     <Route path="/table/high" component={HighTable} />
+                                    <Route path="/rich" component={RichText} />
                                     <Route path="/city" component={City} />
                                     <Route path="/order" component={Order} />
                                     <Route path="/user" component={User} />
