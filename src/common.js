@@ -5,7 +5,8 @@ import Footer from './components/Footer/index'
 import './styles/common.scss'
 // 通用页面入口文件
 export default class Common extends React.Component{
-
+    componentWillMount() {
+    }
     render() {
         return (
             <div>
